@@ -1,7 +1,21 @@
 import random
 from shopping_functions import add_item, remove_item, view_basket, checkout, inventory
 
+file_name = "highscore.csv"
 
+try:
+    # open in read mode
+    highscore = open(file_name, "r")
+    highscore.close()
+    # if throw error, means file doesn't exist
+    # if no error, means file exists
+except FileNotFoundError:
+    # now we know file doesn't exist
+    # create the file
+    highscore = open(file_name, "w")
+    # insert the first line into the file
+    highscore.write("initials,score\n")
+    highscore.close()
 
 
 # starting item definitions -----------------------------------------------

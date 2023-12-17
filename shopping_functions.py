@@ -76,27 +76,42 @@ def calculate_cost(items_for_sale, items_to_buy):
 
     for item, quantity in items_to_buy.items():
         if item in items_for_sale:
-            price = items_for_sale[item]
+            price, _ = items_for_sale[item]
             total_cost += price * quantity
             user_shopping_list.append((item, quantity, price))
         else:
             continue # add to basket should deny any false values being added
     return total_cost  # Return the total cost
 
+
 def checkout(items_for_sale, items_to_buy, starting_cash):
     total_cost = calculate_cost(items_for_sale, items_to_buy)
+    nutrition_score = (nutrition_points(items_for_sale, items_to_buy))
     remaining_cash = (starting_cash - total_cost)
-    dolla_score = (100 - remaining_cash)
+    dollar_score = (100 - remaining_cash)
+    final_score = (nutrition_score + dollar_score)
     if remaining_cash < 0:
         print(f"Total cost ${total_cost} exceeds your budget of ${starting_cash}. Remove some items from your cart.")
         return
     else:
-        print(f"Your final score is {dolla_score}pts")
-        
+        print(f"Your final score is {final_score}pts")
 
- 
 
 def inventory(items_for_sale):
     print("Today our stock is:")
-    for item, price in items_for_sale.items():
-        print(f"{item} ${price}")
+    for item, (price, nutrition) in items_for_sale.items():
+        print(f"{item} ${price} N:{nutrition}")
+
+
+def nutrition_points(items_for_sale, items_to_buy):
+    total_points = 0
+    user_shopping_list = []
+
+    for item, quantity in items_to_buy.items():
+        if item in items_for_sale:
+            _, points = items_for_sale[item] # Access the second element of the tuple (points)
+            total_points += points * quantity
+            user_shopping_list.append((item, quantity, points))
+        else:
+            continue # add to basket should deny any false values being added
+    return total_points  # Return the total points

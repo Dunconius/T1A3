@@ -1,17 +1,21 @@
 import random
 from shopping_functions import add_item, remove_item, view_basket, checkout, inventory
 
+
+
+
 # starting item definitions -----------------------------------------------
 items_for_sale = {
-    "milk": 4,
-    "eggs": 8,
-    "bread": 2,
-    "meat":17
+    "milk": (4, 5),
+    "eggs": (8, 6),
+    "bread": (2, 1),
+    "meat": (17, 8)
 }
 
 items_to_buy = {}
 
 starting_cash = random.randint(87, 129)
+
 total_cost = 0
 
 # user menu -----------------------------------------------

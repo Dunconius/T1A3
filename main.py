@@ -40,7 +40,7 @@ while user_choice != "exit":
     elif (user_choice == "view"):
         view_basket(items_for_sale, items_to_buy, starting_cash)
     elif (user_choice == "checkout"):
-        checkout(items_for_sale, items_to_buy)
+        checkout(items_for_sale, items_to_buy, starting_cash)
     elif (user_choice == "exit"):
         print("Thanks for shopping at Food ‘n’ Things!")
     else:

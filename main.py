@@ -1,4 +1,5 @@
 import random
+from shopping_functions import add_item, remove_item, view_basket, checkout, inventory
 
 # starting item definitions -----------------------------------------------
 items_for_sale = {
@@ -8,79 +9,15 @@ items_for_sale = {
     "meat":17
 }
 
-items_with_quantities = {}
+items_to_buy = {}
 
-cash = random.randint(87, 129)
-
-# function that gets user to input list items -----------------------------------------------
-def add_item(items_with_quantities):
-
-    while True:
-        item = input("Enter an item to add (or 'done' to finish): ")
-        
-        if item.lower() == 'done':
-            break
-        
-        try:
-            quantity = int(input(f"Enter the quantity for {item}: "))
-        except ValueError:
-            print("Invalid quantity. Please enter a valid number.")
-            continue
-
-        # Check if the item already exists in the dictionary
-        if item in items_with_quantities:
-            # If it does, update the quantity
-            items_with_quantities[item] += quantity
-        else:
-            # If it doesn't, add a new entry
-            items_with_quantities[item] = quantity
-
-    return list(items_with_quantities.items())
-
-
-# function that gets user to remove list items -----------------------------------------------
-def remove_item(items_with_quantities):
-    print("Current items with quantities:", items_with_quantities)
-
-    while True:
-        item_to_remove = input("Enter an item to remove (or 'done' to finish): ")
-
-        if item_to_remove.lower() == 'done':
-            break
-
-        # Check if the item is in the dictionary
-        if item_to_remove in items_with_quantities:
-            while True:
-                try:
-                    quantity_to_remove = int(input(f"Enter the quantity to remove for {item_to_remove}: "))
-                    break
-                except ValueError:
-                    print("Invalid input. Please enter a valid number.")
-
-            # Check if the entered quantity is less than or equal to the existing quantity
-            if quantity_to_remove <= items_with_quantities[item_to_remove]:
-                items_with_quantities[item_to_remove] -= quantity_to_remove
-                print(f"Removed {quantity_to_remove} {item_to_remove}(s).")
-                if items_with_quantities[item_to_remove] == 0:
-                    del items_with_quantities[item_to_remove]
-            else:
-                print(f"Cannot remove more than {items_with_quantities[item_to_remove]} {item_to_remove}(s).")
-        else:
-            print(f"{item_to_remove} is not in the list. Please enter a valid item.")
-
-    return items_with_quantities
-
-
-def view_basket(items_with_quantities):
-    print("Your basket contains the following:")
-    for item, quantity in items_with_quantities.items():
-        print(f"{quantity} {item}.")
-    
+starting_cash = random.randint(87, 129)
+total_cost = 0
 
 # user menu -----------------------------------------------
-# print("Welcome to Food ‘n’ Things. We sell all the food, and most of the things.")
-# print(f"You have ${cash} in your wallet.")
-# print("What would you like to buy today?")
+print("Welcome to Food ‘n’ Things. We sell all the food, and most of the things.")
+inventory(items_for_sale)
+print(f"You have ${starting_cash} in your wallet. What would you like to buy today?")
 
 def create_menu():
     print("\nEnter 'add' to add items to basket")
@@ -97,14 +34,14 @@ while user_choice != "exit":
     user_choice = create_menu()
     user_choice = input("Enter your selection: ")
     if (user_choice == "add"):
-        add_item(items_with_quantities)
+        add_item(items_to_buy)
     elif (user_choice == "remove"):
-        remove_item(items_with_quantities)
+        remove_item(items_to_buy)
     elif (user_choice == "view"):
-        view_basket(items_with_quantities)
+        view_basket(items_for_sale, items_to_buy, starting_cash)
     elif (user_choice == "checkout"):
-        checkout()
+        checkout(items_for_sale, items_to_buy)
     elif (user_choice == "exit"):
-        print("Goodbye!")
+        print("Thanks for shopping at Food ‘n’ Things!")
     else:
         print("Invalid Input")

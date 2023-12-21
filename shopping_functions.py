@@ -1,5 +1,7 @@
 import csv
 import pandas as pd
+from colored import fg, attr, bg
+
 
 def add_item(items_to_buy):
 
@@ -96,7 +98,12 @@ def checkout(items_for_sale, items_to_buy, starting_cash,file_name):
         return
     else:
         print(f"Your final score is {final_score}pts")
+    high_scores(file_name, final_score)
     
+
+def high_scores(file_name, final_score):
+    
+    # Read existing high scores from the CSV file into a DataFrame
     try:
         df = pd.read_csv(file_name)
     except FileNotFoundError:
@@ -104,6 +111,7 @@ def checkout(items_for_sale, items_to_buy, starting_cash,file_name):
 
     # Check if the user's score is higher than the lowest score in the CSV file
     if df.empty or final_score > df['Score'].min():
+        print(f"{fg('black')}{bg('cyan')}Congratulations! You made it to the high score{attr('reset')}")
         # Prompt the user for their name
         user_name = input("Enter your name: ")
 
@@ -121,15 +129,16 @@ def checkout(items_for_sale, items_to_buy, starting_cash,file_name):
         df.to_csv(file_name, index=False)
         print("High scores updated!")
     else:
-        print("Your score is not high enough to make it to the top 5.")
+        print(f"{fg('black')}{bg('red')}Sorry, you didn't make the high scores.{attr('reset')}")
+    print("\nHigh Scores:")
+    print(df.to_string(index=False))
 
-def save_high_score():
-    pass
 
 def inventory(items_for_sale):
-    print("Today our stock is:")
+    print(f"\n{fg('black')}{bg('35')}Today our stock is:")
     for item, (price, nutrition) in items_for_sale.items():
         print(f"{item} ${price} N:{nutrition}")
+    print(f"{attr('reset')}")
 
 
 def nutrition_points(items_for_sale, items_to_buy):
@@ -145,30 +154,3 @@ def nutrition_points(items_for_sale, items_to_buy):
             continue # add to basket should deny any false values being added
     return total_points  # Return the total points
 
-# def update_high_scores(filename='high_scores.csv'):
-#     # Read existing high scores from the CSV file into a DataFrame
-#     try:
-#         df = pd.read_csv(filename)
-#     except FileNotFoundError:
-#         df = pd.DataFrame(columns=['Username', 'Score'])
-
-#     # Check if the user's score is higher than the lowest score in the CSV file
-#     if df.empty or final_score > df['Score'].min():
-#         # Prompt the user for their name
-#         user_name = input("Enter your name: ")
-
-#         # Add the new score to the DataFrame
-#         new_score = pd.DataFrame({'Username': [user_name], 'Score': [final_score]})
-#         df = pd.concat([df, new_score], ignore_index=True)
-
-#         # Sort the DataFrame by scores in descending order
-#         df = df.sort_values(by='Score', ascending=False)
-
-#         # Keep only the top 5 scores
-#         df = df.head(5)
-
-#         # Write the updated high scores back to the CSV file
-#         df.to_csv(filename, index=False)
-#         print("High scores updated!")
-#     else:
-#         print("Your score is not high enough to make it to the top 5.")

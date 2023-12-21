@@ -1,4 +1,4 @@
-# function that gets user to input list items 
+import csv
 
 def add_item(items_to_buy):
 
@@ -96,6 +96,8 @@ def checkout(items_for_sale, items_to_buy, starting_cash):
     else:
         print(f"Your final score is {final_score}pts")
 
+def save_high_score():
+    pass
 
 def inventory(items_for_sale):
     print("Today our stock is:")

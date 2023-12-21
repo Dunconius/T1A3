@@ -1,4 +1,3 @@
-import colored
 from colored import fg, attr, bg
 import random
 import pandas as pd
@@ -43,19 +42,19 @@ inventory(items_for_sale)
 print(f"You have ${starting_cash} in your wallet. What would you like to buy today?{attr('reset')}")
 
 def create_menu():
-    print("\nEnter 'add' to add items to basket")
-    print("Enter 'remove' to remove items from basket")
-    print("Enter 'view' to view basket contents")
-    print("Enter 'stock' to see today's inventory")
-    print("Enter 'checkout' to checkout")
-    print("Enter 'exit' to exit\n")
+    print("\nEnter 'add' to add items to basket.")
+    print("Enter 'remove' to remove items from basket.")
+    print("Enter 'view' to view basket contents.")
+    print("Enter 'stock' to see today's inventory.")
+    print("Enter 'checkout' to checkout.")
+    print("Enter 'exit' to exit game.\n")
 
 user_choice = ""
 while user_choice != "exit":
     user_choice = create_menu()
     user_choice = input("Enter your selection: ")
     if (user_choice == "add"):
-        add_item(items_to_buy)
+        add_item(items_to_buy, items_for_sale)
     elif (user_choice == "remove"):
         remove_item(items_to_buy)
     elif (user_choice == "view"):

@@ -1,9 +1,8 @@
-import csv
 import pandas as pd
 from colored import fg, attr, bg
 
 
-def add_item(items_to_buy):
+def add_item(items_to_buy, items_for_sale):
 
     while True:
         item = input("Enter an item to add (or 'done' to finish): ")
@@ -11,11 +10,21 @@ def add_item(items_to_buy):
         if item.lower() == 'done':
             break
         
-        try:
-            quantity = int(input(f"Enter the quantity for {item}: "))
-        except ValueError:
-            print("Invalid quantity. Please enter a valid number.")
+        # Check if user input is valid from items_for_sale
+        if item not in items_for_sale:
+            # If not, throw error and ask for input again
+            print("Invalid item. Please enter a valid item from the list.")
             continue
+        
+        # Check that user is inputting positive, whole numbers
+        while True:
+            try:
+                quantity = int(input(f"Enter the quantity for {item}: "))
+                if quantity <= 0:
+                    raise ValueError("Quantity must be a valid number.")
+                break # break out of loop if input is valid number
+            except ValueError:
+                print("Invalid quantity. Please enter a valid number.")
 
         # Check if the item already exists in the dictionary
         if item in items_to_buy:
@@ -29,8 +38,8 @@ def add_item(items_to_buy):
 
 # function that gets user to remove list items 
 def remove_item(items_to_buy):
-    print("Current items with quantities:", items_to_buy)
-
+    print(f"Your basket contains: {' | '.join(f'{key} x {value}' for key, value in items_to_buy.items())}")
+    
     while True:
         item_to_remove = input("Enter an item to remove (or 'done' to finish): ")
 
@@ -63,14 +72,16 @@ def remove_item(items_to_buy):
 def view_basket(items_for_sale, items_to_buy, starting_cash):
     total_cost = calculate_cost(items_for_sale, items_to_buy)
     # Print the user shopping list and total cost
-    print("\nUser Shopping List:")
+    print("\nYour basket contains:")
     for item, quantity in items_to_buy.items():
-        print(f"{item}: {quantity} units")
+        print(f"{item} x {quantity}")
     print(f"Total Cost: ${total_cost}")
     remaining_cash = (starting_cash - total_cost)
     if remaining_cash < 0:
-        print(f"Warning: Total cost (${total_cost}) exceeds your budget of ${starting_cash}. Please adjust your shopping list.")
-    print(f"Remaining cash: ${remaining_cash}\n")
+        print(f"{fg('black')}{bg('red')}Warning: Total cost (${total_cost}) exceeds your budget of ${starting_cash}. Please adjust your shopping list.{attr('reset')}")
+        print(f"{fg('black')}{bg('red')}Remaining cash: ${remaining_cash}{attr('reset')}\n")
+    else:
+        print(f"{fg('black')}{bg('35')}Remaining cash: ${remaining_cash}{attr('reset')}\n")
 
 
 def calculate_cost(items_for_sale, items_to_buy):
@@ -111,7 +122,7 @@ def high_scores(file_name, final_score):
 
     # Check if the user's score is higher than the lowest score in the CSV file
     if df.empty or final_score > df['Score'].min():
-        print(f"{fg('black')}{bg('cyan')}Congratulations! You made it to the high score{attr('reset')}")
+        print(f"{fg('black')}{bg('cyan')}Congratulations! You made it to the high score!{attr('reset')}")
         # Prompt the user for their name
         user_name = input("Enter your name: ")
 
@@ -135,10 +146,10 @@ def high_scores(file_name, final_score):
 
 
 def inventory(items_for_sale):
-    print(f"\n{fg('black')}{bg('35')}Today our stock is:")
+    print(f"\n{fg('black')}{bg('35')}Today our stock is:{attr('reset')}")
     for item, (price, nutrition) in items_for_sale.items():
-        print(f"{item} ${price} N:{nutrition}")
-    print(f"{attr('reset')}")
+        print(f"{fg('black')}{bg('35')}{item} ${price} N:{nutrition}{attr('reset')}")
+
 
 
 def nutrition_points(items_for_sale, items_to_buy):

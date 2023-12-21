@@ -1,8 +1,8 @@
 import random
-# import pandas as pd
+import pandas as pd
 from shopping_functions import add_item, remove_item, view_basket, checkout, inventory
 
-file_name = "highscore.csv"
+file_name = "high_scores.csv"
 
 try:
     # open in read mode
@@ -61,7 +61,7 @@ while user_choice != "exit":
     elif (user_choice == "stock"):
         inventory(items_for_sale)
     elif (user_choice == "checkout"):
-        checkout(items_for_sale, items_to_buy, starting_cash)
+        checkout(items_for_sale, items_to_buy, starting_cash, file_name)
         print("Thank you for shopping at food 'n' things.")
         break
     elif (user_choice == "exit"):

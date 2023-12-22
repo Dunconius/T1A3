@@ -5,3 +5,4 @@ test2.py
 .venv
 __pycache__
 test_add_items.py
+high_scores.csv

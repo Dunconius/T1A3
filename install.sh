@@ -19,9 +19,10 @@ else
     fi
 fi
 
-VENV_DIR=".venv"
 
 # Check if the virtual environment directory exists
+VENV_DIR=".venv"
+
 if [ -d "$VENV_DIR" ]; then
     echo "Virtual environment $VENV_DIR already exists."
 else
@@ -42,6 +43,40 @@ fi
 # Activate the virtual environment
 source "$VENV_DIR/bin/activate"
 
-pip3 install colored
-pip3 install pandas
+# Check if Pandas is installed
+if python3 -c "import pandas" &>/dev/null; then
+    echo "Pandas is already installed."
+else
+    echo "Pandas is not installed. Installing..."
+
+    # Install Pandas using pip
+    python3 -m pip install pandas
+
+    # Check if the installation was successful
+    if python3 -c "import pandas" &>/dev/null; then
+        echo "Pandas installed successfully."
+    else
+        echo "Failed to install Pandas. Please check and try again."
+        exit 1
+    fi
+fi
+
+# Check if Pandas is installed
+if python3 -c "import colored" &>/dev/null; then
+    echo "Colored is already installed."
+else
+    echo "Colored is not installed. Installing..."
+
+    # Install Pandas using pip
+    python3 -m pip install colored
+
+    # Check if the installation was successful
+    if python3 -c "import colored" &>/dev/null; then
+        echo "Colored installed successfully."
+    else
+        echo "Failed to install Colored. Please check and try again."
+        exit 1
+    fi
+fi
+
 python3 main.py

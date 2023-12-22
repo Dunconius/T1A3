@@ -1,7 +1,7 @@
 from colored import fg, attr, bg
 import random
 import pandas as pd
-from shopping_functions import add_item, remove_item, view_basket, checkout, inventory
+from shopping_functions import add_item, remove_item, view_basket, checkout, inventory, create_menu, user_interaction
 
 file_name = "high_scores.csv"
 
@@ -20,7 +20,7 @@ except FileNotFoundError:
     highscore.close()
 
 
-# starting item definitions -----------------------------------------------
+# starting item variables
 items_for_sale = {
     "milk": (4, 5),
     "eggs": (8, 6),
@@ -34,39 +34,15 @@ starting_cash = random.randint(87, 129)
 
 total_cost = 0
 
-# user menu -----------------------------------------------
+# Main program
 print(f"{fg('black')}{bg('35')}{attr('bold')}\nWelcome to Food ‘n’ Things. We sell all the food, and most of the things!{attr('reset')}")
 print(f"The rules of the game are simple. Buy food to feed your family. \nYour score is determined by how close to 0 your final cash amount is,\nand how many nutrition points you earn from the food you bought.{attr('reset')}")
 input("\nHit enter to get started.")
 inventory(items_for_sale)
 print(f"You have ${starting_cash} in your wallet. What would you like to buy today?{attr('reset')}")
 
-def create_menu():
-    print("\nEnter 'add' to add items to basket.")
-    print("Enter 'remove' to remove items from basket.")
-    print("Enter 'view' to view basket contents.")
-    print("Enter 'stock' to see today's inventory.")
-    print("Enter 'checkout' to checkout.")
-    print("Enter 'exit' to exit game.\n")
+# Call the user interaction function
+user_interaction(items_to_buy, items_for_sale, starting_cash, file_name)
 
-user_choice = ""
-while user_choice != "exit":
-    user_choice = create_menu()
-    user_choice = input("Enter your selection: ")
-    if (user_choice == "add"):
-        add_item(items_to_buy, items_for_sale)
-    elif (user_choice == "remove"):
-        remove_item(items_to_buy)
-    elif (user_choice == "view"):
-        view_basket(items_for_sale, items_to_buy, starting_cash)
-    elif (user_choice == "stock"):
-        inventory(items_for_sale)
-    elif (user_choice == "checkout"):
-        checkout(items_for_sale, items_to_buy, starting_cash, file_name)
-        break
-    elif (user_choice == "exit"):
-        break
-    else:
-        print("Invalid Input")
-
+# End of game
 print(f"\n{fg('0')}{bg('35')}Thank you for shopping at food 'n' things.{attr('reset')}\n")

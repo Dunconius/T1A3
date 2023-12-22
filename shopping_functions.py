@@ -1,6 +1,33 @@
 import pandas as pd
 from colored import fg, attr, bg
 
+def create_menu():
+    print("\nEnter 'add' to add items to basket.")
+    print("Enter 'remove' to remove items from basket.")
+    print("Enter 'view' to view basket contents.")
+    print("Enter 'stock' to see today's inventory.")
+    print("Enter 'checkout' to checkout.")
+    print("Enter 'exit' to exit game.\n")
+
+def user_interaction(items_to_buy, items_for_sale, starting_cash, file_name):
+    while True:
+        create_menu()
+        user_choice = input("Enter your selection: ")
+        if user_choice == "add":
+            add_item(items_to_buy, items_for_sale)
+        elif user_choice == "remove":
+            remove_item(items_to_buy)
+        elif user_choice == "view":
+            view_basket(items_for_sale, items_to_buy, starting_cash)
+        elif user_choice == "stock":
+            inventory(items_for_sale)
+        elif user_choice == "checkout":
+            checkout(items_for_sale, items_to_buy, starting_cash, file_name)
+            break
+        elif user_choice == "exit":
+            break
+        else:
+            print("Invalid Input")
 
 def add_item(items_to_buy, items_for_sale):
 

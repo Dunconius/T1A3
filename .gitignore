@@ -3,3 +3,5 @@
 test.py
 test2.py
 .venv
+__pycache__
+test_add_items.py

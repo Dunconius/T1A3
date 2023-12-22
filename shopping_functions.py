@@ -121,7 +121,7 @@ def high_scores(file_name, final_score):
         df = pd.DataFrame(columns=['Username', 'Score'])
 
     # Check if the user's score is higher than the lowest score in the CSV file
-    if df.empty or final_score > df['Score'].min():
+    if len(df) < 5 or df.empty or final_score > df['Score'].min():
         print(f"{fg('black')}{bg('cyan')}Congratulations! You made it to the high score!{attr('reset')}")
         # Prompt the user for their name
         user_name = input("Enter your name: ")

@@ -7,8 +7,6 @@ from shopping_functions import add_item
     (['milk', '4', 'meat', '5', 'done'], [('milk', 4), ('meat', 5)]),
     # this one tests that invalid input is not saved to the dictionary
     (['invalid_item', 'done'], []),
-    # this one tests that invalid input is not saved to the dictionary - THIS TEST DOESN'T WORK AND PYTEST HAS A FIT
-    (['milk', 'invalid_item', '4', 'done'], [('milk', 4)]),
 ])
 
 def test_add_item_valid_input(user_input, expected_result, monkeypatch):

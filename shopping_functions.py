@@ -2,6 +2,7 @@ import pandas as pd
 from colored import fg, attr, bg
 
 def create_menu():
+    """Prints the menu for user interaction."""
     print("\nEnter 'add' to add items to basket.")
     print("Enter 'remove' to remove items from basket.")
     print("Enter 'view' to view basket contents.")
@@ -10,6 +11,7 @@ def create_menu():
     print("Enter 'exit' to exit game.\n")
 
 def user_interaction(items_to_buy, items_for_sale, starting_cash, file_name):
+    """Takes user input for the main menu."""
     while True:
         create_menu()
         user_choice = input("Enter your selection: ")
@@ -30,7 +32,9 @@ def user_interaction(items_to_buy, items_for_sale, starting_cash, file_name):
             print("Invalid Input")
 
 def add_item(items_to_buy, items_for_sale):
-
+    """Adds items to the users basket. Items are saved to the variable 
+    'items_to_buy'. Items are compared to the variable 'items_for_sale' 
+    to check that they exist"""
     while True:
         item = input("Enter an item to add (or 'done' to finish): ")
         
@@ -65,7 +69,10 @@ def add_item(items_to_buy, items_for_sale):
 
 # function that gets user to remove list items 
 def remove_item(items_to_buy):
-    print(f"Your basket contains: {' | '.join(f'{key} x {value}' for key, value in items_to_buy.items())}")
+    print(
+        f"""Your basket contains: {' | '.join(f'{key} x {value}' 
+        for key, value in items_to_buy.items())}"""
+        )
     
     while True:
         item_to_remove = input("Enter an item to remove (or 'done' to finish): ")
@@ -77,21 +84,29 @@ def remove_item(items_to_buy):
         if item_to_remove in items_to_buy:
             while True:
                 try:
-                    quantity_to_remove = int(input(f"Enter the quantity to remove for {item_to_remove}: "))
+                    quantity_to_remove = int(input(
+                        f"Enter the quantity to remove for {item_to_remove}: "))
                     break
                 except ValueError:
                     print("Invalid input. Please enter a valid number.")
 
-            # Check if the entered quantity is less than or equal to the existing quantity
+            # Check if the entered quantity is less than or equal to the 
+            # existing quantity.
             if quantity_to_remove <= items_to_buy[item_to_remove]:
                 items_to_buy[item_to_remove] -= quantity_to_remove
                 print(f"Removed {quantity_to_remove} {item_to_remove}(s).")
                 if items_to_buy[item_to_remove] == 0:
                     del items_to_buy[item_to_remove]
             else:
-                print(f"Cannot remove more than {items_to_buy[item_to_remove]} {item_to_remove}(s).")
+                print(
+                    f"Cannot remove more than {items_to_buy[item_to_remove]} "
+                    f"{item_to_remove}(s)."
+                    )
         else:
-            print(f"{item_to_remove} is not in the list. Please enter a valid item.")
+            print(
+                f"{item_to_remove} is not in the list. "
+                f"Please enter a valid item."
+                )
 
     return items_to_buy
 
@@ -105,10 +120,19 @@ def view_basket(items_for_sale, items_to_buy, starting_cash):
     print(f"Total Cost: ${total_cost}")
     remaining_cash = (starting_cash - total_cost)
     if remaining_cash < 0:
-        print(f"{fg('black')}{bg('red')}Warning: Total cost (${total_cost}) exceeds your budget of ${starting_cash}. Please adjust your shopping list.{attr('reset')}")
-        print(f"{fg('black')}{bg('red')}Remaining cash: ${remaining_cash}{attr('reset')}\n")
+        print(
+            f"""{fg('black')}{bg('red')}Warning: Total cost (${total_cost}) 
+            exceeds your budget of ${starting_cash}. Please adjust your 
+            shopping list.{attr('reset')}"""
+            )
+        print(
+            f"{fg('black')}{bg('red')}Remaining cash: "
+            f"${remaining_cash}{attr('reset')}\n"
+            )
     else:
-        print(f"{fg('black')}{bg('35')}Remaining cash: ${remaining_cash}{attr('reset')}\n")
+        print(
+            f"{fg('black')}{bg('35')}Remaining cash: "
+            f"${remaining_cash}{attr('reset')}\n")
 
 
 def calculate_cost(items_for_sale, items_to_buy):
@@ -132,7 +156,9 @@ def checkout(items_for_sale, items_to_buy, starting_cash,file_name):
     dollar_score = (100 - remaining_cash)
     final_score = (nutrition_score + dollar_score)
     if remaining_cash < 0:
-        print(f"Total cost ${total_cost} exceeds your budget of ${starting_cash}. Remove some items from your cart.")
+        print(
+            f"Total cost ${total_cost} exceeds your budget of ${starting_cash}."
+            f" Remove some items from your cart.")
         return
     else:
         print(f"Your final score is {final_score}pts")
@@ -149,7 +175,10 @@ def high_scores(file_name, final_score):
 
     # Check if the user's score is higher than the lowest score in the CSV file
     if len(df) < 5 or df.empty or final_score > df['Score'].min():
-        print(f"{fg('black')}{bg('cyan')}Congratulations! You made it to the high score!{attr('reset')}")
+        print(
+            f"{fg('black')}{bg('cyan')}Congratulations! You made it to the high"
+            f" score!{attr('reset')}"
+            )
         # Prompt the user for their name
         user_name = input("Enter your name: ")
 
@@ -167,7 +196,10 @@ def high_scores(file_name, final_score):
         df.to_csv(file_name, index=False)
         print("High scores updated!")
     else:
-        print(f"{fg('black')}{bg('red')}Sorry, you didn't make the high scores.{attr('reset')}")
+        print(
+            f"{fg('black')}{bg('red')}Sorry, you didn't make the high scores."
+            f"{attr('reset')}"
+            )
     print("\nHigh Scores:")
     print(df.to_string(index=False))
 
@@ -175,8 +207,10 @@ def high_scores(file_name, final_score):
 def inventory(items_for_sale):
     print(f"\n{fg('black')}{bg('35')}Today our stock is:{attr('reset')}")
     for item, (price, nutrition) in items_for_sale.items():
-        print(f"{fg('black')}{bg('35')}{item} ${price} N:{nutrition}{attr('reset')}")
-
+        print(
+            f"{fg('black')}{bg('35')}{item} ${price} N:{nutrition}"
+            f"{attr('reset')}"
+            )
 
 
 def nutrition_points(items_for_sale, items_to_buy):
@@ -185,7 +219,8 @@ def nutrition_points(items_for_sale, items_to_buy):
 
     for item, quantity in items_to_buy.items():
         if item in items_for_sale:
-            _, points = items_for_sale[item] # Access the second element of the tuple (points)
+            # Access the second element of the tuple (points)
+            _, points = items_for_sale[item] 
             total_points += points * quantity
             user_shopping_list.append((item, quantity, points))
         else:

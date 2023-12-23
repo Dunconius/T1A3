@@ -16,7 +16,7 @@ except FileNotFoundError:
     # create the file
     highscore = open(file_name, "w")
     # insert the first line into the file
-    highscore.write("initials,score\n")
+    highscore.write("Name,Score\n")
     highscore.close()
 
 

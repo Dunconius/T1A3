@@ -145,7 +145,7 @@ def high_scores(file_name, final_score):
     try:
         df = pd.read_csv(file_name)
     except FileNotFoundError:
-        df = pd.DataFrame(columns=['Username', 'Score'])
+        df = pd.DataFrame(columns=['Name', 'Score'])
 
     # Check if the user's score is higher than the lowest score in the CSV file
     if len(df) < 5 or df.empty or final_score > df['Score'].min():
@@ -154,7 +154,7 @@ def high_scores(file_name, final_score):
         user_name = input("Enter your name: ")
 
         # Add the new score to the DataFrame
-        new_score = pd.DataFrame({'Username': [user_name], 'Score': [final_score]})
+        new_score = pd.DataFrame({'Name': [user_name], 'Score': [final_score]})
         df = pd.concat([df, new_score], ignore_index=True)
 
         # Sort the DataFrame by scores in descending order

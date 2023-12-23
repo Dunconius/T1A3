@@ -61,13 +61,13 @@ else
     fi
 fi
 
-# Check if Pandas is installed
+# Check if Colored is installed
 if python3 -c "import colored" &>/dev/null; then
     echo "Colored is already installed."
 else
     echo "Colored is not installed. Installing..."
 
-    # Install Pandas using pip
+    # Install Colored using pip
     python3 -m pip install colored
 
     # Check if the installation was successful
@@ -79,4 +79,4 @@ else
     fi
 fi
 
-python3 main.py
+echo "Installation successfull! Enter './run.sh' to start your game."

@@ -34,7 +34,8 @@ def user_interaction(items_to_buy, items_for_sale, starting_cash, file_name):
 def add_item(items_to_buy, items_for_sale):
     """Adds items to the users basket. Items are saved to the variable 
     'items_to_buy'. Items are compared to the variable 'items_for_sale' 
-    to check that they exist"""
+    to check that they exist.
+    """
     while True:
         item = input("Enter an item to add (or 'done' to finish): ")
         
@@ -67,23 +68,27 @@ def add_item(items_to_buy, items_for_sale):
 
     return list(items_to_buy.items())
 
-# function that gets user to remove list items 
 def remove_item(items_to_buy):
+    """Takes user input to remove items from users basket."""
+    # Prints the contents of the users basket in item - quantity format.
     print(
         f"""Your basket contains: {' | '.join(f'{key} x {value}' 
         for key, value in items_to_buy.items())}"""
         )
     
     while True:
+        # Asks user input for item to be removed
         item_to_remove = input("Enter an item to remove (or 'done' to finish): ")
 
         if item_to_remove.lower() == 'done':
             break
 
-        # Check if the item is in the dictionary
+        # Compares user input with current basket to check if the item is 
+        # in the basket
         if item_to_remove in items_to_buy:
             while True:
                 try:
+                    # Takes user input for quantity of items to remove
                     quantity_to_remove = int(input(
                         f"Enter the quantity to remove for {item_to_remove}: "))
                     break
@@ -93,16 +98,23 @@ def remove_item(items_to_buy):
             # Check if the entered quantity is less than or equal to the 
             # existing quantity.
             if quantity_to_remove <= items_to_buy[item_to_remove]:
+                # If quantity is valid then removed that number of items from
+                # the users basket and prints successful message to screen
                 items_to_buy[item_to_remove] -= quantity_to_remove
                 print(f"Removed {quantity_to_remove} {item_to_remove}(s).")
+                # If resulting quantity = 0 then item is removed from the list
                 if items_to_buy[item_to_remove] == 0:
                     del items_to_buy[item_to_remove]
             else:
+                # If user input is greater than current quantity then error
+                # message is displayed and asks for user input again
                 print(
                     f"Cannot remove more than {items_to_buy[item_to_remove]} "
                     f"{item_to_remove}(s)."
                     )
         else:
+            # If user input doesn't match items in the list then prints an
+            # error message and asks for input again.
             print(
                 f"{item_to_remove} is not in the list. "
                 f"Please enter a valid item."
@@ -110,8 +122,10 @@ def remove_item(items_to_buy):
 
     return items_to_buy
 
-# function to view items in basket 
 def view_basket(items_for_sale, items_to_buy, starting_cash):
+    """Prints the current basket contents to screen along with the users
+    remaining cash.
+    """
     total_cost = calculate_cost(items_for_sale, items_to_buy)
     # Print the user shopping list and total cost
     print("\nYour basket contains:")
@@ -136,25 +150,35 @@ def view_basket(items_for_sale, items_to_buy, starting_cash):
 
 
 def calculate_cost(items_for_sale, items_to_buy):
+    """Calculates the cost of items in the basket."""
     total_cost = 0
     user_shopping_list = []
 
+    # Iterates through the list of items in basket, compares the items with
+    # the matching items in items_for_sale, multiplies the qty by the price
+    # and then sums the total cost
     for item, quantity in items_to_buy.items():
         if item in items_for_sale:
             price, _ = items_for_sale[item]
             total_cost += price * quantity
             user_shopping_list.append((item, quantity, price))
         else:
-            continue # add to basket should deny any false values being added
-    return total_cost  # Return the total cost
+            # if there are any invalid items in basket they are ignored
+            continue 
+    return total_cost
 
 
 def checkout(items_for_sale, items_to_buy, starting_cash,file_name):
+    """Runs the calculate_cost and _nutrition_score functions, then calculates
+    the remaining cash score to return the users final score for this game.
+    """
     total_cost = calculate_cost(items_for_sale, items_to_buy)
     nutrition_score = (nutrition_points(items_for_sale, items_to_buy))
     remaining_cash = (starting_cash - total_cost)
+    # remaining cash calculation
     dollar_score = (100 - remaining_cash)
     final_score = (nutrition_score + dollar_score)
+    # checks if user has enough cash to proceed to checkout
     if remaining_cash < 0:
         print(
             f"Total cost ${total_cost} exceeds your budget of ${starting_cash}."
@@ -162,12 +186,15 @@ def checkout(items_for_sale, items_to_buy, starting_cash,file_name):
         return
     else:
         print(f"Your final score is {final_score}pts")
+    # runs the high_scores function
     high_scores(file_name, final_score)
     
 
 def high_scores(file_name, final_score):
-    
-    # Read existing high scores from the CSV file into a DataFrame
+    """ Takes the users final score and compares it to the high scores file to
+    determine if user makes it into the high scores.
+    """
+    # Checks that the file exists and loads it into a DataFrame
     try:
         df = pd.read_csv(file_name)
     except FileNotFoundError:
@@ -179,20 +206,20 @@ def high_scores(file_name, final_score):
             f"{fg('black')}{bg('cyan')}Congratulations! You made it to the high"
             f" score!{attr('reset')}"
             )
-        # Prompt the user for their name
+        # Prompts the user for their name
         user_name = input("Enter your name: ")
 
         # Add the new score to the DataFrame
         new_score = pd.DataFrame({'Name': [user_name], 'Score': [final_score]})
         df = pd.concat([df, new_score], ignore_index=True)
 
-        # Sort the DataFrame by scores in descending order
+        # Sorts the DataFrame by scores in descending order
         df = df.sort_values(by='Score', ascending=False)
 
-        # Keep only the top 5 scores
+        # Keeps only the top 5 scores
         df = df.head(5)
 
-        # Write the updated high scores back to the CSV file
+        # Writes the updated high scores back to the CSV file
         df.to_csv(file_name, index=False)
         print("High scores updated!")
     else:
@@ -205,6 +232,7 @@ def high_scores(file_name, final_score):
 
 
 def inventory(items_for_sale):
+    """Prints the availaible inventory to screen."""
     print(f"\n{fg('black')}{bg('35')}Today our stock is:{attr('reset')}")
     for item, (price, nutrition) in items_for_sale.items():
         print(
@@ -214,9 +242,11 @@ def inventory(items_for_sale):
 
 
 def nutrition_points(items_for_sale, items_to_buy):
+    """Calculation for nutrition points."""
     total_points = 0
     user_shopping_list = []
 
+    # Iterates through items_to_buy and compares them to items_for_sale
     for item, quantity in items_to_buy.items():
         if item in items_for_sale:
             # Access the second element of the tuple (points)
@@ -224,6 +254,7 @@ def nutrition_points(items_for_sale, items_to_buy):
             total_points += points * quantity
             user_shopping_list.append((item, quantity, points))
         else:
-            continue # add to basket should deny any false values being added
-    return total_points  # Return the total points
+            # Continues if any false values are found in the list
+            continue 
+    return total_points
 

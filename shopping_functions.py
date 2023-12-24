@@ -25,7 +25,6 @@ def user_interaction(items_to_buy, items_for_sale, starting_cash, file_name):
             inventory(items_for_sale)
         elif user_choice == "checkout":
             checkout(items_for_sale, items_to_buy, starting_cash, file_name)
-            break
         elif user_choice == "exit":
             break
         else:
@@ -135,9 +134,9 @@ def view_basket(items_for_sale, items_to_buy, starting_cash):
     remaining_cash = (starting_cash - total_cost)
     if remaining_cash < 0:
         print(
-            f"""{fg('black')}{bg('red')}Warning: Total cost (${total_cost}) 
-            exceeds your budget of ${starting_cash}. Please adjust your 
-            shopping list.{attr('reset')}"""
+            f"{fg('black')}{bg('red')}Warning: Total cost (${total_cost}) "
+            f"exceeds your budget of ${starting_cash}. Please adjust your "
+            f"shopping list.{attr('reset')}"
             )
         print(
             f"{fg('black')}{bg('red')}Remaining cash: "
@@ -152,7 +151,6 @@ def view_basket(items_for_sale, items_to_buy, starting_cash):
 def calculate_cost(items_for_sale, items_to_buy):
     """Calculates the cost of items in the basket."""
     total_cost = 0
-    user_shopping_list = []
 
     # Iterates through the list of items in basket, compares the items with
     # the matching items in items_for_sale, multiplies the qty by the price
@@ -161,7 +159,6 @@ def calculate_cost(items_for_sale, items_to_buy):
         if item in items_for_sale:
             price, _ = items_for_sale[item]
             total_cost += price * quantity
-            user_shopping_list.append((item, quantity, price))
         else:
             # if there are any invalid items in basket they are ignored
             continue 
@@ -181,14 +178,16 @@ def checkout(items_for_sale, items_to_buy, starting_cash,file_name):
     # checks if user has enough cash to proceed to checkout
     if remaining_cash < 0:
         print(
-            f"Total cost ${total_cost} exceeds your budget of ${starting_cash}."
-            f" Remove some items from your cart.")
+            f"{fg('black')}{bg('red')}Total cost ${total_cost} exceeds your "
+            f"budget of ${starting_cash}. Remove some items from your cart."
+            f"{attr('reset')}")
+        # if not returns them to main menu
         return
     else:
         print(f"Your final score is {final_score}pts")
     # runs the high_scores function
     high_scores(file_name, final_score)
-    
+        
 
 def high_scores(file_name, final_score):
     """ Takes the users final score and compares it to the high scores file to
@@ -229,6 +228,9 @@ def high_scores(file_name, final_score):
             )
     print("\nHigh Scores:")
     print(df.to_string(index=False))
+    print(f"\n{fg('0')}{bg('35')}Thank you for shopping at Food 'n' Things."
+      f"{attr('reset')}\n")
+    exit()
 
 
 def inventory(items_for_sale):
